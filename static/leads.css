@@ -1,0 +1,36 @@
+#container{
+  padding: 25px;
+  width: 900px;
+  background-color: #ebebe0;
+  padding: 10px;
+  font-family: 'play', sans-serif;
+}
+
+h1{
+  margin-left: 150px;
+  font-family: 'play', sans-serif;
+  text-shadow: 3px 3px grey;
+  color: white;
+
+}
+.form-group{
+  margin-left: 70px;
+}
+
+#leadresult{
+  margin-top: 160px;
+}
+
+.navbar{
+  background-color: rgba(184, 184, 148, 0.7);
+  width: 900px;
+}
+
+#result{
+    margin-top: 160px;
+}
+
+#page_numbers{
+  margin-top: 150px;
+  margin-left: 600px;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Leads Search</title>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js" integrity="sha384-ux8v3A6CPtOTqOzMKiuo3d/DomGaaClxFYdCu2HPMBEkf6x2xiDyJ7gkXU0MWwaD" crossorigin="anonymous"></script>
+    <link rel= 'stylesheet' type= 'text/css' href= "{{ url_for('static', filename='leads.css')}}">
+<link href='https://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
+    <script>
+      $(document).ready(function(){
+        console.log('working')
+        $(document).on('keyup', 'form', function(event){
+          $.post('/leads/search', $(this).serialize(), function(fullList){
+            $('#leadresult').html(fullList);
+          });
+          return false;
+        });
+        $(document).on('submit', 'form', function(event){
+          $.post('/leads/search', $(this).serialize(), function(fullList){
+            $('#leadresult').html(fullList);
+          });
+          return false;
+        });
+
+    var rows_per_page = 5;
+    var total_rows;
+
+function initPageNumber(){
+    $(document).on('keyup', 'form', 'submit', function(event){
+
+      $.post('/data/countrows', $(this).serialize(), function(total_rows){
+        total_rows = total_rows;
+        var count = 1;
+        var rows_per_page = 5;
+        console.log(total_rows[0].all_rows); // will log.
+        for(var x = 0; x < total_rows[0].all_rows; x += rows_per_page){
+          $.post('data/page/'+ page_num + '/' + rows_per_page,$(this).serialize(), function(){
+          $('#page_numbers').html('<li><a href="data/page/' +page_num+'/'+ rows_per_page+'">'+count+'</a></li>')
+            count++;
+            console.log(rows_per_page) //won't log
+        })
+      }
+      })
+    })
+}
+  function getPage(page_num){
+
+      $(document).on('keyup', 'form', 'submit', function(event){
+      $('#rows').html('');
+      $.post('data/page/'+ page_num + '/' + rows_per_page, $(this).serialize(), function(page_results){
+        $(page_results[0]).each(function(){
+          for(var i= 0; i < page_results.length; i++){
+              $('#rows').append('<tr class= "table table-striped"><td>'+ page_results[i].id +'</td>'+
+                '<td>'+ page_results[i].first_name +'</td>'+
+                  '<td>'+ page_results[i].last_name +'</td>'+
+                    '<td>'+ page_results[i].registered_datetime +'</td>'+
+                      '<td>'+ page_results[i].email +'</td></tr>')
+              console.log(page_results)           //need forloop here
+          }
+        })
+      })
+    })
+  }
+
+
+
+  var page_num = 1;
+
+    //If there's a hash fragment specifying a page number
+    if(window.location.hash !== '')
+    {
+        //Get the hash fragment as an integer
+        var hash_num = parseInt(window.location.hash.substring(1));
+
+        //If the hash fragment integer is valid
+        if(hash_num >= 0)
+        {
+            //Overwrite the default page number with the user supplied number
+            page_num = hash_num;
+        }
+    }
+    initPageNumber(page_num);
+      getPage(page_num);
+
+    //Load the first page
+      });
+    </script>
+  </head>
+  <body>
+    <div id= "container">
+
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <h1>Welcome to the leads generator!</h1>
+
+            <form class= "form form-inline" role= "form" action= "/lead/search" method= 'POST'/>
+              <div class="form-group">
+                <h6>Name:</h6><input id= "name" type= "text" name= "name" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <h6>From:</h6><input type= "date" name= "from_date"/>
+              </div>
+              <div class="form-group">
+                <h6>Date:</h6><input type= "date" name= "to_date"/>
+              </div>
+              <div class="form-group">
+                <input type= "hidden" name= "page_number"/>
+              </div>
+              <div class="form-group">
+                <input id= "name" type= "hidden" name= "submit"/>
+              </div>
+            </form>
+          </div>
+        </nav>
+        <div id= "page_numbers"></div>
+        <table id= "result" class = "table table-striped">
+            <thead></thead>
+            <tbody>
+              <tr class= "table table-striped">
+
+              <td id= "rows"></td>
+            </tr>
+            </tbody>
+        </table>
+    <div id= "leadresult"></div>
+
+</div>
+  </body>
+</html>

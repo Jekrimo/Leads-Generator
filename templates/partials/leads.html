@@ -1,0 +1,25 @@
+
+    <div id= "leadresult">
+
+  <table class = "table table-striped">
+    <thead>
+     <tr>
+      <th>Leads_id</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Registered Datetime</th>
+      <th>Email</th>
+     </tr>
+    </thead>
+    <tbody>
+      {% for list in fullList %}
+      <tr class= "table table-striped">
+        <td>{{list.id}}</td>
+        <td>{{list.first_name}}</td>
+        <td>{{list.last_name}}</td>
+        <td>{{list.registered_datetime}}</td>
+        <td>{{list.email}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </div>
